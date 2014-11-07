@@ -35,7 +35,16 @@ namespace P7_Generate_Use_Data
         };
         #endregion
 
-
+        Random DoubleRandom = new Random();
+        public double RandomDouble(double min, double max)
+        {
+            return DoubleRandom.NextDouble() * (max - min) + min;
+        }
+        public Coordinate RandomCoordinateInArea(Coordinate topLeft, Coordinate bottomRight)
+        {
+            Coordinate newCoords = new Coordinate(RandomDouble(topLeft.Lattitude, bottomRight.Lattitude), RandomDouble(bottomRight.Longtitude, topLeft.Longtitude));
+            return newCoords;
+        }
 
         public IEnumerable<User> GenerateUsers(int n)
         {
@@ -54,11 +63,6 @@ namespace P7_Generate_Use_Data
             return users;
         }
 
-        Random DoubleRandom = new Random();
-        public double RandomDouble(double min, double max)
-        {
-            return DoubleRandom.NextDouble() * (max - min) + min;
-        }
 
         public bool IsCoordsCloseToAnyOther(Coordinate newCoord, IEnumerable<Coordinate> otherCoords, double minDist)
         {
@@ -83,7 +87,7 @@ namespace P7_Generate_Use_Data
         {
             for (int i = 0; i < RetryCreateCoordinatesTime; i++)
             {
-                Coordinate newCoords = new Coordinate(RandomDouble(topLeft.Lattitude, bottomRight.Lattitude), RandomDouble(bottomRight.Longtitude, topLeft.Longtitude));
+                var newCoords = RandomCoordinateInArea(topLeft, bottomRight);
 
                 if (!IsCoordsCloseToAnyOther(newCoords, coordinates, minDist))
                 {
@@ -112,11 +116,30 @@ namespace P7_Generate_Use_Data
         }
 
 
-
-
-        public IEnumerable<Bike> GenerateBikes(int n)
+        public IEnumerable<Bike> GenerateBikes(int n, IEnumerable<Station> stations, Coordinate topLeft, Coordinate bottmRight)
         {
-            throw new NotImplementedException();
+            Random rand = new Random();
+            var bikes = new List<Bike>(n);
+
+            for (int i = 0; i < n; i++)
+            {
+                if (rand.Next(5) < 3)
+                {
+                    // out
+                    var coords = RandomCoordinateInArea(topLeft, bottmRight);
+                    Bike bike = new Bike(i, coords, false);
+                    bikes.Add(bike);
+                }
+                else
+                {
+                    // station
+                    var station = stations.ElementAt(rand.Next(stations.Count()));
+                    Bike bike = new Bike(i, station.Location, true);
+                    bikes.Add(bike);
+                }
+            }
+
+            return bikes;
         }
 
         public IEnumerable<Reservation> GenerateReservations(int n, IEnumerable<User> users, IEnumerable<Station> stations, IEnumerable<Bike> bikes)
