@@ -58,5 +58,25 @@ namespace P7_Generate_Use_Data
 
             return users;
         }
+
+        public IEnumerable<Station> GenerateStations(int n)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Bike> GenerateBikes(int n)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Reservation> GenerateReservations(int n, IEnumerable<User> users, IEnumerable<Station> stations, IEnumerable<Bike> bikes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Trip> GenerateTrips(int n, IEnumerable<User> users, IEnumerable<Station> stations, IEnumerable<Bike> bikes)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
