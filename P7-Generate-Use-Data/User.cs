@@ -18,6 +18,9 @@ namespace P7_Generate_Use_Data
         public string Name { get; set; }
 
 
-        
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

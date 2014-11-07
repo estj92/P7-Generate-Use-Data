@@ -8,12 +8,16 @@ namespace P7_Generate_Use_Data
 {
     class Station
     {
-        private Coordinate newCoords;
-
         public Station(Coordinate location)
         {
             Location = location;
         }
         public Coordinate Location { get; set; }
+
+
+        public override string ToString()
+        {
+            return "Station: " + Location.ToString();
+        }
     }
 }

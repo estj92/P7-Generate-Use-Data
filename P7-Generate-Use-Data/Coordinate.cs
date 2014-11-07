@@ -16,5 +16,10 @@ namespace P7_Generate_Use_Data
 
         public double Longtitude { get; set; }
         public double Lattitude { get; set; }
+
+        public override string ToString()
+        {
+            return "Long: " + Longtitude + " - Lat: " + Lattitude;
+        }
     }
 }
