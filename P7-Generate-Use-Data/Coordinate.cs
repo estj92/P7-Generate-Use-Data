@@ -8,7 +8,7 @@ namespace P7_Generate_Use_Data
 {
     class Coordinate
     {
-        public Coordinate(double longtitude, double lattitude)
+        public Coordinate(double lattitude, double longtitude)
         {
             Longtitude = longtitude;
             Lattitude = lattitude;
