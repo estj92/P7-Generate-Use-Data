@@ -18,10 +18,10 @@ namespace P7_Generate_Use_Data
             var users = generator.GenerateUsers(2000);
             var stations = generator.GenerateStations(50, 1, topLeft, bottomRight);
             var bikes = generator.GenerateBikes(150, stations, topLeft, bottomRight);
-            // reservations
+            var reservations = generator.GenerateReservations(users.Count() * 3, users, stations, bikes, DateTime.Now.AddYears(-10), DateTime.Now);
             // trips
 
-            foreach (var item in bikes)
+            foreach (var item in reservations.Take(100))
             {
                 Console.WriteLine(item);
             }

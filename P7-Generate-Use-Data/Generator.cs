@@ -82,7 +82,7 @@ namespace P7_Generate_Use_Data
             return false;
         }
 
-        private int RetryCreateCoordinatesTime { get { return 5; } }
+        private int RetryCreateCoordinatesTime { get { return 10; } }
         private Coordinate TryToCreateCoordinates(double minDist, List<Coordinate> coordinates, Coordinate topLeft, Coordinate bottomRight)
         {
             for (int i = 0; i < RetryCreateCoordinatesTime; i++)
@@ -142,10 +142,58 @@ namespace P7_Generate_Use_Data
             return bikes;
         }
 
-        public IEnumerable<Reservation> GenerateReservations(int n, IEnumerable<User> users, IEnumerable<Station> stations, IEnumerable<Bike> bikes)
+
+        private int RetryCreateReservationTimes { get { return 10; } }
+        private Random RandomForReservation = new Random();
+        private Reservation TryToCreateReservation(IEnumerable<User> users, IEnumerable<Station> stations, IEnumerable<Bike> bikes, DateTime earliest, DateTime latest, Dictionary<User, List<DateTime>> userReservations, Dictionary<Bike, List<DateTime>> bikesReserved)
         {
-            throw new NotImplementedException();
+            TimeSpan timeBetween = latest - earliest;
+            for (int i = 0; i < RetryCreateReservationTimes; i++)
+            {
+                var user = users.PickRandom();
+                var bike = bikes.PickRandom();
+                var station = stations.PickRandom();
+                var when = earliest.AddMinutes(RandomForReservation.Next((int)timeBetween.TotalMinutes));
+
+                var bikeOkay = !(bikesReserved.ContainsKey(bike) && bikesReserved[bike].Contains(when));
+                var userOkay = !(userReservations.ContainsKey(user) && userReservations[user].Contains(when));
+
+                if (bikeOkay && userOkay)
+                {
+                    if (!bikesReserved.ContainsKey(bike))
+                    {
+                        bikesReserved.Add(bike, new List<DateTime>());
+                    }
+                    bikesReserved[bike].Add(when);
+
+                    if (!userReservations.ContainsKey(user))
+                    {
+                        userReservations.Add(user, new List<DateTime>());
+                    }
+                    userReservations[user].Add(when);
+
+                    return new Reservation(user, station, bike, when);
+                }
+            }
+
+            throw new Exception();
         }
+        // I'M THE CORNER CUTTER!
+        public IEnumerable<Reservation> GenerateReservations(int n, IEnumerable<User> users, IEnumerable<Station> stations, IEnumerable<Bike> bikes, DateTime earliest, DateTime latest)
+        {
+            var reservations = new List<Reservation>(n);
+            var userReservations = new Dictionary<User, List<DateTime>>();
+            var bikeReservations = new Dictionary<Bike, List<DateTime>>();
+
+            for (int i = 0; i < n; i++)
+            {
+                var reservation = TryToCreateReservation(users, stations, bikes, earliest, latest, userReservations, bikeReservations);
+                reservations.Add(reservation);
+            }
+
+            return reservations;
+        }
+
 
         public IEnumerable<Trip> GenerateTrips(int n, IEnumerable<User> users, IEnumerable<Station> stations, IEnumerable<Bike> bikes)
         {
