@@ -16,5 +16,8 @@ namespace P7_Generate_Use_Data
 
         public int ID { get; set; }
         public string Name { get; set; }
+
+
+        
     }
 }
