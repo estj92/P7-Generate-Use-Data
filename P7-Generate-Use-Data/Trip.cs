@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P7_Generate_Use_Data
 {
-    class Trip
+    class Trip:ISequelize
     {
         public Trip(User user, Bike bike, DateTime startTime, DateTime endTime, Coordinate startLocation, Coordinate endLocation)
         {
@@ -37,5 +37,19 @@ namespace P7_Generate_Use_Data
 
             return sb.ToString();
         }
+
+        #region ISequelize Members
+
+        public string ToSequelize()
+        {
+            StringBuilder sb = new StringBuilder("{ ");
+
+
+
+            sb.Append(" }");
+            return sb.ToString();
+        }
+
+        #endregion
     }
 }

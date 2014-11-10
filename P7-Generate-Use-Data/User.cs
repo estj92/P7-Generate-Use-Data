@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P7_Generate_Use_Data
 {
-    class User: IEquatable<User>
+    class User: IEquatable<User>, ISequelize
     {
         public User(int id, string name)
         {
@@ -71,6 +71,20 @@ namespace P7_Generate_Use_Data
         {
             return ID;
         }
+        #endregion
+
+        #region ISequelize Members
+
+        public string ToSequelize()
+        {
+            StringBuilder sb = new StringBuilder("{ ");
+
+
+
+            sb.Append(" }");
+            return sb.ToString();
+        }
+
         #endregion
     }
 }

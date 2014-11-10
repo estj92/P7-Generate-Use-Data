@@ -32,14 +32,28 @@ namespace P7_Generate_Use_Data
             Console.WriteLine("Reservations:\t" + reservations.Count().ToString().PadLeft(5));
             Console.WriteLine("Trips:\t\t" + trips.Count().ToString().PadLeft(5));
 
-            //foreach (var item in trips.Take(200))
-            //{
-            //    Console.WriteLine(item);
-            //}
-            Console.WriteLine(trips.Average(t => (t.Endtime - t.StartTime).TotalMinutes));
+            var b2 = bikes.Take(10);
+            var r2 = reservations.Take(10);
+            var s2 = stations.Take(10);
+            var t2 = trips.Take(10);
+            var u2 = users.Take(10);
+
+            Print(b2);
+            //Print(r2);
+            //Print(s2);
+            //Print(t2);
+            //Print(u2);
 
             Console.WriteLine("~~~~~DONE~~~~~");
             Console.ReadKey();
+        }
+
+        private static void Print(IEnumerable<ISequelize> list)
+        {
+            foreach (var item in list)
+            {
+                Console.WriteLine(item.ToSequelize());
+            }
         }
     }
 }

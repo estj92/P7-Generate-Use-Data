@@ -6,25 +6,27 @@ using System.Threading.Tasks;
 
 namespace P7_Generate_Use_Data
 {
-    class Bike: IEquatable<Bike>
+    class Bike: IEquatable<Bike>, ISequelize
     {
-        public Bike(int id, Coordinate location, bool atStation)
+        public Bike(int id, int battery, Coordinate location, bool occupied, Station station)
         {
             ID = id;
             Location = location;
-            AtStation = atStation;
+            Station = station;
+            Occupied = occupied;
+            Battery = battery;
         }
 
         public int ID { get; set; }
+        public int Battery { get; set; }
         public Coordinate Location { get; set; }
-        public bool AtStation { get; set; }
+        public Station Station { get; set; }
+        public bool Occupied { get; set; }
 
         public override string ToString()
         {
-            return "Bike: " + ID.ToString().PadLeft(3) + " Station: " + AtStation.ToString().PadLeft(5) + " " + Location;
+            return "Bike: " + ID.ToString().PadLeft(3) + " Station: " + Station.ToString().PadLeft(5) + " " + Location;
         }
-
-
 
         #region IEquatable<Bike> Members
 
@@ -74,6 +76,36 @@ namespace P7_Generate_Use_Data
         public override int GetHashCode()
         {
             return ID;
+        }
+
+        #endregion
+
+        #region ISequelize Members
+
+        public string ToSequelize()
+        {
+            StringBuilder sb = new StringBuilder("{ ");
+
+            sb.Append("location: \"");
+            sb.Append(Location.Longtitude.ToString(System.Globalization.CultureInfo.InvariantCulture) + "," + Location.Lattitude.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            sb.Append("\", ");
+
+            sb.Append("batteryLife: ");
+            sb.Append(Battery);
+            sb.Append(", ");
+
+            sb.Append("status: \'");
+            if (Occupied)
+            {
+                sb.Append("un");
+            }
+            sb.Append("occupied\', ");
+
+            sb.Append("StationId: ");
+            sb.Append(Station == null ? "null" : "1");
+
+            sb.Append(" }");
+            return sb.ToString();
         }
 
         #endregion

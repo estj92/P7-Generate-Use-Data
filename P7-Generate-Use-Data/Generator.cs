@@ -168,18 +168,22 @@ namespace P7_Generate_Use_Data
 
             for (int i = 0; i < n; i++)
             {
+                int battery = Rand.Next(0, 100);
+
                 if (rand.Next(5) < 3)
                 {
+                    bool occupied = (Rand.Next(0, 5) > 0);
+
                     // out
                     var coords = RandomCoordinateInArea(TopLeft, BottomRight);
-                    Bike bike = new Bike(i, coords, false);
+                    Bike bike = new Bike(i, battery, coords, occupied, null);
                     bikes.Add(bike);
                 }
                 else
                 {
                     // station
                     var station = stations[rand.Next(stations.Count)];
-                    Bike bike = new Bike(i, station.Location, true);
+                    Bike bike = new Bike(i, battery, station.Location, false, station);
                     bikes.Add(bike);
                 }
             }
@@ -327,7 +331,7 @@ namespace P7_Generate_Use_Data
             // e1 < s2
             // e2 < s1
             return (end1 <= start2 || end2 <= start1);
-        } 
+        }
         #endregion
     }
 }
