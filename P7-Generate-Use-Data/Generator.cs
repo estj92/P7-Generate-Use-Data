@@ -142,7 +142,7 @@ namespace P7_Generate_Use_Data
             {
                 string firstName = RandomFirstName();
                 string lastName = RandomLastName();
-                User user = new User(n.ToString(), "facebook", firstName + lastName + n + @"Someprovider.top", firstName + " " + lastName);
+                User user = new User(i.ToString(), "facebook", firstName + lastName + i + @"Someprovider.top", firstName + " " + lastName);
                 users.Add(user);
             }
 

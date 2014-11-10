@@ -1,0 +1,8 @@
+2000 # users
+50 # stations
+200 # bikes
+5000 # reservations
+10000 # trips
+50,50 # top left
+200,200 #bottom right
+2005 # earliest year
