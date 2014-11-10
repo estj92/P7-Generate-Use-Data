@@ -35,34 +35,56 @@ namespace P7_Generate_Use_Data
         };
         #endregion
 
-        Random DoubleRandom = new Random();
+        public Generator(double minDistBetweenStations, int retryTimes, Coordinate topLeft, Coordinate bottomRight, DateTime earliest, DateTime latest, TimeSpan shortest, TimeSpan longest)
+        {
+            DoubleRandom = new Random();
+            Rand = new Random();
+
+            MinDistanceBetweenStations = minDistBetweenStations;
+
+            RetryCreateCoordinatesTime = retryTimes;
+            RetryCreateReservationTimes = retryTimes;
+            RetryFindBikeTimes = retryTimes;
+
+            TopLeft = topLeft;
+            BottomRight = bottomRight;
+
+            Earliest = earliest;
+            Latest = latest;
+
+            Shortest = shortest;
+            Longest = longest;
+        }
+
+        private Random DoubleRandom { get; set; }
+        private Random Rand { get; set; }
+
+        public double MinDistanceBetweenStations { get; set; }
+
+        private int RetryCreateCoordinatesTime { get; set; }
+        private int RetryCreateReservationTimes { get; set; }
+        private int RetryFindBikeTimes { get; set; }
+
+        private Coordinate TopLeft { get; set; }
+        private Coordinate BottomRight { get; set; }
+
+        private DateTime Earliest { get; set; }
+        private DateTime Latest { get; set; }
+
+        private TimeSpan Shortest { get; set; }
+        private TimeSpan Longest { get; set; }
+
+        #region Coordinate helpers
         public double RandomDouble(double min, double max)
         {
             return DoubleRandom.NextDouble() * (max - min) + min;
         }
+
         public Coordinate RandomCoordinateInArea(Coordinate topLeft, Coordinate bottomRight)
         {
             Coordinate newCoords = new Coordinate(RandomDouble(topLeft.Lattitude, bottomRight.Lattitude), RandomDouble(bottomRight.Longtitude, topLeft.Longtitude));
             return newCoords;
         }
-
-        public IEnumerable<User> GenerateUsers(int n)
-        {
-            var users = new List<User>(n);
-            Random rand = new Random();
-
-            for (int i = 0; i < n; i++)
-            {
-                var first = FirstNames[rand.Next(0, FirstNames.Length)];
-                var last = LastNames[rand.Next(0, LastNames.Length)];
-
-                User user = new User(n, first + " " + last);
-                users.Add(user);
-            }
-
-            return users;
-        }
-
 
         public bool IsCoordsCloseToAnyOther(Coordinate newCoord, IEnumerable<Coordinate> otherCoords, double minDist)
         {
@@ -82,7 +104,6 @@ namespace P7_Generate_Use_Data
             return false;
         }
 
-        private int RetryCreateCoordinatesTime { get { return 10; } }
         private Coordinate TryToCreateCoordinates(double minDist, List<Coordinate> coordinates, Coordinate topLeft, Coordinate bottomRight)
         {
             for (int i = 0; i < RetryCreateCoordinatesTime; i++)
@@ -97,15 +118,37 @@ namespace P7_Generate_Use_Data
 
             throw new Exception();
         }
+        #endregion
 
-        public IEnumerable<Station> GenerateStations(int n, double minDist, Coordinate topLeft, Coordinate bottomRight)
+
+        #region Users
+        public IEnumerable<User> GenerateUsers(int n)
+        {
+            var users = new List<User>(n);
+            Random rand = new Random();
+
+            for (int i = 0; i < n; i++)
+            {
+                var first = FirstNames[rand.Next(0, FirstNames.Length)];
+                var last = LastNames[rand.Next(0, LastNames.Length)];
+
+                User user = new User(n, first + " " + last);
+                users.Add(user);
+            }
+
+            return users;
+        }
+        #endregion
+
+        #region Stations
+        public IEnumerable<Station> GenerateStations(int n)
         {
             var stations = new List<Station>(n);
             var coordinates = new List<Coordinate>(n);
 
             for (int i = 0; i < n; i++)
             {
-                var newCoords = TryToCreateCoordinates(minDist, coordinates, topLeft, bottomRight);
+                var newCoords = TryToCreateCoordinates(MinDistanceBetweenStations, coordinates, TopLeft, BottomRight);
 
                 coordinates.Add(newCoords);
                 Station station = new Station(newCoords);
@@ -114,9 +157,10 @@ namespace P7_Generate_Use_Data
 
             return stations;
         }
+        #endregion
 
-
-        public IEnumerable<Bike> GenerateBikes(int n, IEnumerable<Station> stations, Coordinate topLeft, Coordinate bottmRight)
+        #region Bikes
+        public IEnumerable<Bike> GenerateBikes(int n, IEnumerable<Station> stations)
         {
             Random rand = new Random();
             var bikes = new List<Bike>(n);
@@ -126,7 +170,7 @@ namespace P7_Generate_Use_Data
                 if (rand.Next(5) < 3)
                 {
                     // out
-                    var coords = RandomCoordinateInArea(topLeft, bottmRight);
+                    var coords = RandomCoordinateInArea(TopLeft, BottomRight);
                     Bike bike = new Bike(i, coords, false);
                     bikes.Add(bike);
                 }
@@ -141,10 +185,9 @@ namespace P7_Generate_Use_Data
 
             return bikes;
         }
+        #endregion
 
-
-        private int RetryCreateReservationTimes { get { return 10; } }
-        private Random RandomForReservation = new Random();
+        #region Reservations
         private Reservation TryToCreateReservation(IEnumerable<User> users, IEnumerable<Station> stations, IEnumerable<Bike> bikes, DateTime earliest, DateTime latest, Dictionary<User, List<DateTime>> userReservations, Dictionary<Bike, List<DateTime>> bikesReserved)
         {
             TimeSpan timeBetween = latest - earliest;
@@ -153,7 +196,7 @@ namespace P7_Generate_Use_Data
                 var user = users.PickRandom();
                 var bike = bikes.PickRandom();
                 var station = stations.PickRandom();
-                var when = earliest.AddMinutes(RandomForReservation.Next((int)timeBetween.TotalMinutes));
+                var when = earliest.AddMinutes(Rand.Next((int)timeBetween.TotalMinutes));
 
                 var bikeOkay = !(bikesReserved.ContainsKey(bike) && bikesReserved[bike].Contains(when));
                 var userOkay = !(userReservations.ContainsKey(user) && userReservations[user].Contains(when));
@@ -179,7 +222,7 @@ namespace P7_Generate_Use_Data
             throw new Exception();
         }
         // I'M THE CORNER CUTTER!
-        public IEnumerable<Reservation> GenerateReservations(int n, IEnumerable<User> users, IEnumerable<Station> stations, IEnumerable<Bike> bikes, DateTime earliest, DateTime latest)
+        public IEnumerable<Reservation> GenerateReservations(int n, IEnumerable<User> users, IEnumerable<Station> stations, IEnumerable<Bike> bikes)
         {
             var reservations = new List<Reservation>(n);
             var userReservations = new Dictionary<User, List<DateTime>>();
@@ -187,15 +230,16 @@ namespace P7_Generate_Use_Data
 
             for (int i = 0; i < n; i++)
             {
-                var reservation = TryToCreateReservation(users, stations, bikes, earliest, latest, userReservations, bikeReservations);
+                var reservation = TryToCreateReservation(users, stations, bikes, Earliest, Latest, userReservations, bikeReservations);
                 reservations.Add(reservation);
             }
 
             return reservations;
-        }
+        } 
+        #endregion
 
         // Do we care for night time?
-        public IEnumerable<Trip> GenerateTrips(int n, IEnumerable<User> users, IEnumerable<Station> stations, IEnumerable<Bike> bikes, DateTime firstStart, DateTime lastEnd, TimeSpan shortestTripTime, TimeSpan longestTripTime)
+        public IEnumerable<Trip> GenerateTrips(int n, IEnumerable<User> users, IEnumerable<Station> stations, IEnumerable<Bike> bikes)
         {
             var trips = new List<Trip>(n);
             var bikesInUse = new Dictionary<Bike, Tuple<DateTime, DateTime>>();
@@ -209,15 +253,13 @@ namespace P7_Generate_Use_Data
             return trips;
         }
 
-        private Random RandomForTrips = new Random();
-        private int RetryFindBikeTimes { get { return 10; } }
         private Bike FindABikeForATrip(DateTime earliest, DateTime latest, List<Bike> bikes, Dictionary<Bike, Tuple<DateTime, DateTime>> bikesInUse, TimeSpan shortestTime, TimeSpan longestTime)
         {
-            
+
 
             for (int i = 0; i < RetryFindBikeTimes; i++)
             {
-                var bike = bikes[RandomForTrips.Next(bikes.Count)];
+                var bike = bikes[Rand.Next(bikes.Count)];
 
                 // never been used
                 if (!bikesInUse.ContainsKey(bike))
