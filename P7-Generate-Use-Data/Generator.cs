@@ -194,9 +194,42 @@ namespace P7_Generate_Use_Data
             return reservations;
         }
 
-
-        public IEnumerable<Trip> GenerateTrips(int n, IEnumerable<User> users, IEnumerable<Station> stations, IEnumerable<Bike> bikes)
+        // Do we care for night time?
+        public IEnumerable<Trip> GenerateTrips(int n, IEnumerable<User> users, IEnumerable<Station> stations, IEnumerable<Bike> bikes, DateTime firstStart, DateTime lastEnd, TimeSpan shortestTripTime, TimeSpan longestTripTime)
         {
+            var trips = new List<Trip>(n);
+            var bikesInUse = new Dictionary<Bike, Tuple<DateTime, DateTime>>();
+            var userInUse = new Dictionary<User, Tuple<DateTime, DateTime>>();
+
+            for (int i = 0; i < n; i++)
+            {
+                //
+            }
+
+            return trips;
+        }
+
+        private Random RandomForTrips = new Random();
+        private int RetryFindBikeTimes { get { return 10; } }
+        private Bike FindABikeForATrip(DateTime earliest, DateTime latest, List<Bike> bikes, Dictionary<Bike, Tuple<DateTime, DateTime>> bikesInUse, TimeSpan shortestTime, TimeSpan longestTime)
+        {
+            
+
+            for (int i = 0; i < RetryFindBikeTimes; i++)
+            {
+                var bike = bikes[RandomForTrips.Next(bikes.Count)];
+
+                // never been used
+                if (!bikesInUse.ContainsKey(bike))
+                {
+
+                }
+                else
+                {
+                    var uses = bikesInUse[bike];
+                }
+            }
+
             throw new NotImplementedException();
         }
     }
