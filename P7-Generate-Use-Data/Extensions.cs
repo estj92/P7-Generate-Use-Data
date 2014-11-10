@@ -27,5 +27,14 @@ namespace P7_Generate_Use_Data
                 return source.ElementAt(Rand.Next(source.Count()));
             }
         }
+
+        public static string DateTimeToSequelize(this DateTime source)
+        {
+            return "(" + source.Year + ", " +
+                      source.Month + ", " +
+                      source.Day + ", " +
+                      source.Hour + ", " +
+                      source.Minute + ")";
+        }
     }
 }

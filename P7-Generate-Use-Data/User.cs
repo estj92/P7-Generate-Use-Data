@@ -8,13 +8,17 @@ namespace P7_Generate_Use_Data
 {
     class User: IEquatable<User>, ISequelize
     {
-        public User(int id, string name)
+        public User(string profileId, string provider, string mail, string name)
         {
-            ID = id;
+            ProfileID = profileId;
+            Provider = provider;
+            Mail = mail;
             Name = name;
         }
 
-        public int ID { get; set; }
+        public string ProfileID { get; set; }
+        public string Provider { get; set; }
+        public string Mail { get; set; }
         public string Name { get; set; }
 
 
@@ -31,7 +35,7 @@ namespace P7_Generate_Use_Data
                 return false;
             }
 
-            return this.ID == other.ID;
+            return this.ProfileID == other.ProfileID;
         }
 
         public override bool Equals(object obj)
@@ -69,7 +73,7 @@ namespace P7_Generate_Use_Data
 
         public override int GetHashCode()
         {
-            return ID;
+            return ProfileID.GetHashCode();
         }
         #endregion
 
@@ -79,7 +83,20 @@ namespace P7_Generate_Use_Data
         {
             StringBuilder sb = new StringBuilder("{ ");
 
+            sb.Append("profile_id: ");
+            sb.Append(ProfileID);
+            sb.Append(", ");
 
+            sb.Append("provider: ");
+            sb.Append(Provider);
+            sb.Append(", ");
+
+            sb.Append("email: ");
+            sb.Append(Mail);
+            sb.Append(", ");
+
+            sb.Append("display_name: ");
+            sb.Append(Name);
 
             sb.Append(" }");
             return sb.ToString();

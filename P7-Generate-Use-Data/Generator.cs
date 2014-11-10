@@ -33,6 +33,15 @@ namespace P7_Generate_Use_Data
             "Madsen", 
             "Mikkelsen"
         };
+
+        private string RandomFirstName()
+        {
+            return FirstNames[Rand.Next(FirstNames.Length)];
+        }
+        private string RandomLastName()
+        {
+            return LastNames[Rand.Next(LastNames.Length)];
+        }
         #endregion
 
         public Generator(double minDistBetweenStations, int retryTimes, Coordinate topLeft, Coordinate bottomRight, DateTime earliest, DateTime latest, TimeSpan shortest, TimeSpan longest)
@@ -122,6 +131,7 @@ namespace P7_Generate_Use_Data
         #endregion
 
 
+
         #region Users
         public List<User> GenerateUsers(int n)
         {
@@ -130,10 +140,9 @@ namespace P7_Generate_Use_Data
 
             for (int i = 0; i < n; i++)
             {
-                var first = FirstNames[rand.Next(0, FirstNames.Length)];
-                var last = LastNames[rand.Next(0, LastNames.Length)];
-
-                User user = new User(n, first + " " + last);
+                string firstName = RandomFirstName();
+                string lastName = RandomLastName();
+                User user = new User(n.ToString(), "facebook", firstName + lastName + n + @"Someprovider.top", firstName + " " + lastName);
                 users.Add(user);
             }
 
@@ -152,7 +161,7 @@ namespace P7_Generate_Use_Data
                 var newCoords = TryToCreateCoordinates(MinDistanceBetweenStations, coordinates, TopLeft, BottomRight);
 
                 coordinates.Add(newCoords);
-                Station station = new Station(newCoords);
+                Station station = new Station(RandomLastName() + Rand.Next() + "-station", newCoords);
                 stations.Add(station);
             }
 

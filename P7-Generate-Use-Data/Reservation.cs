@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P7_Generate_Use_Data
 {
-    class Reservation:ISequelize
+    class Reservation: ISequelize
     {
         public Reservation(User user, Station station, Bike bike, DateTime when)
         {
@@ -33,7 +33,16 @@ namespace P7_Generate_Use_Data
         {
             StringBuilder sb = new StringBuilder("{ ");
 
+            sb.Append("startTime: new Date");
+            sb.Append(Extensions.DateTimeToSequelize(When));
+            sb.Append(", ");
 
+            sb.Append("UserId: ");
+            sb.Append(User.ProfileID);
+            sb.Append(", ");
+
+            sb.Append("BikeId: ");
+            sb.Append(Bike.ID);
 
             sb.Append(" }");
             return sb.ToString();

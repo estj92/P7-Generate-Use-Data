@@ -21,5 +21,13 @@ namespace P7_Generate_Use_Data
         {
             return "Long: " + Longtitude + " - Lat: " + Lattitude;
         }
+
+        public string LocationToSequelize
+        {
+            get
+            {
+                return Lattitude.ToString(System.Globalization.CultureInfo.InvariantCulture) + ", " + Longtitude.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            }
+        }
     }
 }

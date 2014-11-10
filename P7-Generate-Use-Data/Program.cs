@@ -38,11 +38,11 @@ namespace P7_Generate_Use_Data
             var t2 = trips.Take(10);
             var u2 = users.Take(10);
 
-            Print(b2);
+            //Print(b2);
             //Print(r2);
             //Print(s2);
             //Print(t2);
-            //Print(u2);
+            Print(u2);
 
             Console.WriteLine("~~~~~DONE~~~~~");
             Console.ReadKey();

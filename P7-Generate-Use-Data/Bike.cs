@@ -87,7 +87,7 @@ namespace P7_Generate_Use_Data
             StringBuilder sb = new StringBuilder("{ ");
 
             sb.Append("location: \"");
-            sb.Append(Location.Longtitude.ToString(System.Globalization.CultureInfo.InvariantCulture) + "," + Location.Lattitude.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            sb.Append(Location.LocationToSequelize);
             sb.Append("\", ");
 
             sb.Append("batteryLife: ");
@@ -107,6 +107,8 @@ namespace P7_Generate_Use_Data
             sb.Append(" }");
             return sb.ToString();
         }
+
+
 
         #endregion
     }
