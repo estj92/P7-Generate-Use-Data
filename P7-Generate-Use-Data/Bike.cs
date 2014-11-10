@@ -54,9 +54,16 @@ namespace P7_Generate_Use_Data
 
         public static bool operator ==(Bike b1, Bike b2)
         {
-            return (ReferenceEquals(b1, null) ?
-                false :
-                b1.Equals(b2));
+            if (ReferenceEquals(b1, b2))
+            {
+                return true;
+            }
+            if (ReferenceEquals(b1, null) || ReferenceEquals(b2, null))
+            {
+                return false;
+            }
+
+            return b1.Equals(b2);
         }
 
         public static bool operator !=(Bike b1, Bike b2)

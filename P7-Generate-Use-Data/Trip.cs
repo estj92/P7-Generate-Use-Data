@@ -14,7 +14,7 @@ namespace P7_Generate_Use_Data
             Bike = bike;
             StartTime = startTime;
             Endtime = endTime;
-            StartLocation=startLocation;
+            StartLocation = startLocation;
             EndLocation = endLocation;
         }
 
@@ -24,5 +24,18 @@ namespace P7_Generate_Use_Data
         public DateTime Endtime { get; set; }
         public Coordinate StartLocation { get; set; }
         public Coordinate EndLocation { get; set; }
+
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(User == null ? "No user" : User.Name);
+            sb.Append('\t');
+            sb.Append(Bike.ID.ToString());
+            sb.Append('\t');
+            sb.Append((Endtime - StartTime).TotalMinutes + " minutes");
+
+            return sb.ToString();
+        }
     }
 }

@@ -70,6 +70,7 @@ namespace P7_Generate_Use_Data
 
         private DateTime Earliest { get; set; }
         private DateTime Latest { get; set; }
+        private TimeSpan TimeBetweenEarliestAndLatest { get { return Latest - Earliest; } }
 
         private TimeSpan Shortest { get; set; }
         private TimeSpan Longest { get; set; }
@@ -235,44 +236,96 @@ namespace P7_Generate_Use_Data
             }
 
             return reservations;
-        } 
+        }
         #endregion
 
         // Do we care for night time?
         public IEnumerable<Trip> GenerateTrips(int n, IEnumerable<User> users, IEnumerable<Station> stations, IEnumerable<Bike> bikes)
         {
             var trips = new List<Trip>(n);
-            var bikesInUse = new Dictionary<Bike, Tuple<DateTime, DateTime>>();
-            var userInUse = new Dictionary<User, Tuple<DateTime, DateTime>>();
+            var bikesInUse = new Dictionary<Bike, List<Tuple<DateTime, DateTime>>>();
+            var usersInUse = new Dictionary<User, List<Tuple<DateTime, DateTime>>>();
 
             for (int i = 0; i < n; i++)
             {
-                //
+                var start = Earliest.AddMinutes(Rand.Next((int)TimeBetweenEarliestAndLatest.TotalMinutes));
+                var end = start.AddMinutes(Rand.Next((int)Shortest.TotalMinutes, (int)Longest.TotalMinutes + 1));
+
+                var bike = FindABikeForATrip(bikes, bikesInUse, start, end);
+                var user = Rand.Next(0, 2) == 0 ?
+                    FindAUserForATrip(users, usersInUse, start, end) :
+                    null;
+
+                Coordinate startCoord = Rand.Next(0, 4) == 0 ?
+                    RandomCoordinateInArea(TopLeft, BottomRight) :
+                    stations.ElementAt(Rand.Next(stations.Count())).Location;
+                Coordinate endCoord = Rand.Next(0, 4) == 0 ?
+                    RandomCoordinateInArea(TopLeft, BottomRight) :
+                    stations.ElementAt(Rand.Next(stations.Count())).Location;
+
+                Trip trip = new Trip(user, bike, start, end, startCoord, endCoord);
+
+                trips.Add(trip);
             }
 
             return trips;
         }
 
-        private Bike FindABikeForATrip(DateTime earliest, DateTime latest, List<Bike> bikes, Dictionary<Bike, Tuple<DateTime, DateTime>> bikesInUse, TimeSpan shortestTime, TimeSpan longestTime)
+        private Bike FindABikeForATrip(IEnumerable<Bike> bikes, Dictionary<Bike, List<Tuple<DateTime, DateTime>>> bikesInUse, DateTime start, DateTime end)
         {
-
-
             for (int i = 0; i < RetryFindBikeTimes; i++)
             {
-                var bike = bikes[Rand.Next(bikes.Count)];
+                var bike = bikes.ElementAt(Rand.Next(bikes.Count()));
 
                 // never been used
                 if (!bikesInUse.ContainsKey(bike))
                 {
-
+                    bikesInUse.Add(bike, new List<Tuple<DateTime, DateTime>>());
                 }
-                else
+
+                var uses = bikesInUse[bike];
+
+                var timeOverlaps = uses
+                    .FirstOrDefault(t => TimeOverlap(t.Item1, t.Item2, start, end));
+
+                if (timeOverlaps == null)
                 {
-                    var uses = bikesInUse[bike];
+                    return bike;
                 }
             }
 
-            throw new NotImplementedException();
+            throw new Exception();
+        }
+
+        private User FindAUserForATrip(IEnumerable<User> users, Dictionary<User, List<Tuple<DateTime, DateTime>>> usersInUse, DateTime start, DateTime end)
+        {
+            for (int i = 0; i < RetryFindBikeTimes; i++)
+            {
+                var user = users.ElementAt(Rand.Next(users.Count()));
+
+                if (!usersInUse.ContainsKey(user))
+                {
+                    usersInUse.Add(user, new List<Tuple<DateTime, DateTime>>());
+                }
+
+                var uses = usersInUse[user];
+
+                var timeOverlaps = uses.FirstOrDefault(t => TimeOverlap(t.Item1, t.Item2, start, end));
+
+                if (timeOverlaps == null)
+                {
+                    return user;
+                }
+            }
+
+            return null;
+        }
+
+        private bool TimeOverlap(DateTime start1, DateTime end1, DateTime start2, DateTime end2)
+        {
+            // e1 < s2
+            // e2 < s1
+            return (end1 <= start2 || end2 <= start1);
         }
     }
 }

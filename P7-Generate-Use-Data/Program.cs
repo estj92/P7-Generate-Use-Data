@@ -15,7 +15,7 @@ namespace P7_Generate_Use_Data
             DateTime earliest = DateTime.Now.AddYears(-10);
             DateTime latest = DateTime.Now;
             TimeSpan shortest = new TimeSpan(0, 10, 0);
-            TimeSpan longest = new TimeSpan(6, 0, 0);
+            TimeSpan longest = new TimeSpan(3, 0, 0);
             Generator generator = new Generator(1, 10, topLeft, bottomRight, earliest, latest, shortest, longest);
 
 
@@ -23,14 +23,20 @@ namespace P7_Generate_Use_Data
             var stations = generator.GenerateStations(50);
             var bikes = generator.GenerateBikes(150, stations);
             var reservations = generator.GenerateReservations(users.Count() * 3, users, stations, bikes);
-            // trips
+            var trips = generator.GenerateTrips(10000, users, stations, bikes);
 
 
             Console.WriteLine("Users:\t\t" + users.Count().ToString().PadLeft(5));
             Console.WriteLine("Stations:\t" + stations.Count().ToString().PadLeft(5));
             Console.WriteLine("Bikes:\t\t" + bikes.Count().ToString().PadLeft(5));
             Console.WriteLine("Reservations:\t" + reservations.Count().ToString().PadLeft(5));
+            Console.WriteLine("Trips:\t\t" + trips.Count().ToString().PadLeft(5));
 
+            //foreach (var item in trips.Take(200))
+            //{
+            //    Console.WriteLine(item);
+            //}
+            Console.WriteLine(trips.Average(t => (t.Endtime - t.StartTime).TotalMinutes));
 
             Console.WriteLine("~~~~~DONE~~~~~");
             Console.ReadKey();
