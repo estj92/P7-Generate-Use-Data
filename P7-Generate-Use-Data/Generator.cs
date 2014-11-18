@@ -9,30 +9,8 @@ namespace P7_Generate_Use_Data
     class Generator
     {
         #region Names
-        private string[] FirstNames = new string[] { 
-            "Emil", 
-            "Mathew",
-            "Lars",
-            "Eric",
-            "Jens",
-            "Morten",
-            "Peter",
-            "Simon",
-            "Julie",
-            "Line",
-            "Trine",
-            "Pia",
-            "Svend" 
-        };
-
-        private string[] LastNames = new string[]{
-            "Jensen",
-            "Svendsen",
-            "Fuglsang",
-            "Petersen",
-            "Madsen", 
-            "Mikkelsen"
-        };
+        private string[] FirstNames { get; set; }
+        private string[] LastNames { get; set; }
 
         private string RandomFirstName()
         {
@@ -44,10 +22,13 @@ namespace P7_Generate_Use_Data
         }
         #endregion
 
-        public Generator(double minDistBetweenStations, int retryTimes, Coordinate topLeft, Coordinate bottomRight, DateTime earliest, DateTime latest, TimeSpan shortest, TimeSpan longest)
+        public Generator(IEnumerable<string> firstNames, IEnumerable<string> lastNames, double minDistBetweenStations, int retryTimes, Coordinate topLeft, Coordinate bottomRight, DateTime earliest, DateTime latest, TimeSpan shortest, TimeSpan longest)
         {
             DoubleRandom = new Random();
             Rand = new Random();
+
+            FirstNames = firstNames.ToArray();
+            LastNames = lastNames.ToArray();
 
             MinDistanceBetweenStations = minDistBetweenStations;
 

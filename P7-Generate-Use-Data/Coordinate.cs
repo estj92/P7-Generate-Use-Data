@@ -26,7 +26,7 @@ namespace P7_Generate_Use_Data
         {
             get
             {
-                return Lattitude.ToString(System.Globalization.CultureInfo.InvariantCulture) + ", " + Longtitude.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                return "\"" + Lattitude.ToString(System.Globalization.CultureInfo.InvariantCulture) + ", " + Longtitude.ToString(System.Globalization.CultureInfo.InvariantCulture) + "\"";
             }
         }
     }

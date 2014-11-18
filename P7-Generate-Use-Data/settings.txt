@@ -1,3 +1,5 @@
+Emi, Lars, Mathew, Tom, Peter, Trine, Søren, Svend, Pia, Mia, Åge, Bo, Thomas, Simon, Morten, Louise, Birgit
+Jensen, Svendsen, Fuglsang, Mikkelsen, Madsen, Petersen, Sprogø
 2000 # users
 50 # stations
 200 # bikes

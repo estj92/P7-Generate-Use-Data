@@ -9,22 +9,31 @@ namespace P7_Generate_Use_Data
 {
     class Program
     {
-        private static char[] ReadSplit = new char[] { '#' };
-        private static char[] DoubleSplitter = new char[] { ',' };
+        private static char[] CommentSplitter = new char[] { '#' };
+        private static char[] CommaSplitter = new char[] { ',' };
         private static int GetInt(string str)
         {
-            var split = str.Split(ReadSplit);
+            var split = str.Split(CommentSplitter);
             return int.Parse(split[0]);
         }
         private static Coordinate GetCoords(string str)
         {
-            var split = str.Split(ReadSplit);
-            var vals = split[0].Split(DoubleSplitter);
+            var split = str.Split(CommentSplitter);
+            var vals = split[0].Split(CommaSplitter);
             return new Coordinate(double.Parse(vals[0]), double.Parse(vals[1]));
+        }
+
+        private static IEnumerable<string> ReadNames(string str)
+        {
+            return
+                str.Split(CommaSplitter)
+                .Select(s => s.Trim());
         }
 
         static void Main(string[] args)
         {
+            IEnumerable<string> firstNames;
+            IEnumerable<string> lastNames;
             int nUsers = 100;
             int nStations = 10;
             int nBikes = 50;
@@ -40,6 +49,8 @@ namespace P7_Generate_Use_Data
 
             using (StreamReader reader = new StreamReader("settings.txt"))
             {
+                firstNames = ReadNames(reader.ReadLine());
+                lastNames = ReadNames(reader.ReadLine());
                 nUsers = GetInt(reader.ReadLine());
                 nStations = GetInt(reader.ReadLine());
                 nBikes = GetInt(reader.ReadLine());
@@ -52,7 +63,7 @@ namespace P7_Generate_Use_Data
                 earliest = new DateTime(GetInt(reader.ReadLine()), 1, 1);
             }
 
-            Generator generator = new Generator(1, 10, topLeft, bottomRight, earliest, latest, shortest, longest);
+            Generator generator = new Generator(firstNames, lastNames, 1, 10, topLeft, bottomRight, earliest, latest, shortest, longest);
 
             var users = generator.GenerateUsers(nUsers);
             var stations = generator.GenerateStations(nStations);
@@ -105,22 +116,22 @@ namespace P7_Generate_Use_Data
                 writer.WriteLine(@"module.exports = {");
 
 
-                GetItemsToWrite(bikes, "Bike", writer);
+                WriteItems(bikes, "Bike", writer);
                 writer.WriteLine(",");
-                GetItemsToWrite(reservations, "Reservation", writer);
+                WriteItems(reservations, "Reservation", writer);
                 writer.WriteLine(",");
-                GetItemsToWrite(stations, "Station", writer);
+                WriteItems(stations, "Station", writer);
                 writer.WriteLine(",");
-                GetItemsToWrite(trips, "Trip", writer);
+                WriteItems(trips, "Trip", writer);
                 writer.WriteLine(",");
-                GetItemsToWrite(users, "User", writer);
+                WriteItems(users, "User", writer);
 
                 writer.WriteLine();
                 writer.WriteLine("}");
             }
         }
 
-        private static void GetItemsToWrite(IEnumerable<ISequelize> items, string name, StreamWriter writer)
+        private static void WriteItems(IEnumerable<ISequelize> items, string name, StreamWriter writer)
         {
             writer.Write("  Create");
             writer.Write(name);

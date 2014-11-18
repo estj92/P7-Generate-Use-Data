@@ -86,9 +86,9 @@ namespace P7_Generate_Use_Data
         {
             StringBuilder sb = new StringBuilder("{ ");
 
-            sb.Append("location: \"");
+            sb.Append("location: ");
             sb.Append(Location.LocationToSequelize);
-            sb.Append("\", ");
+            sb.Append(", ");
 
             sb.Append("batteryLife: ");
             sb.Append(Battery);

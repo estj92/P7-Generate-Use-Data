@@ -87,16 +87,17 @@ namespace P7_Generate_Use_Data
             sb.Append(ProfileID);
             sb.Append(", ");
 
-            sb.Append("provider: ");
+            sb.Append("provider: \"");
             sb.Append(Provider);
-            sb.Append(", ");
+            sb.Append("\", ");
 
             sb.Append("email: ");
             sb.Append(Mail);
             sb.Append(", ");
 
-            sb.Append("display_name: ");
+            sb.Append("display_name: \"");
             sb.Append(Name);
+            sb.Append("\"");
 
             sb.Append(" }");
             return sb.ToString();
