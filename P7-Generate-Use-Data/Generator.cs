@@ -324,5 +324,20 @@ namespace P7_Generate_Use_Data
             return (end1 <= start2 || end2 <= start1);
         }
         #endregion
+
+        #region Feedbacks
+        public List<FeedBack> GenerateFeedBacks(int n, List<User> users)
+        {
+            var feedbacks = new List<FeedBack>(n);
+
+            for (int i = 0; i < n; i++)
+            {
+                FeedBack fb = new FeedBack(RandomCoordinateInArea(TopLeft, BottomRight), "I IS VERY GOOD MESSAGE. SEND MONEY.", users.PickRandom().ID);
+                feedbacks.Add(fb);
+            }
+
+            return feedbacks;
+        }
+        #endregion
     }
 }

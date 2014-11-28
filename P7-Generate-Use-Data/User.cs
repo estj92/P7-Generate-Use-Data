@@ -10,12 +10,17 @@ namespace P7_Generate_Use_Data
     {
         public User(string profileId, string provider, string mail, string name)
         {
+            ID = IDGEN;
             ProfileID = profileId;
             Provider = provider;
             Mail = mail;
             Name = name;
         }
 
+        private static int idgen;
+        private static int IDGEN { get { return idgen++; } }
+
+        public int ID { get; set; }
         public string ProfileID { get; set; }
         public string Provider { get; set; }
         public string Mail { get; set; }
@@ -84,7 +89,7 @@ namespace P7_Generate_Use_Data
             StringBuilder sb = new StringBuilder("{ ");
 
             sb.Append("id: ")
-                .Append(ProfileID)
+                .Append(ID)
                 .Append(", ");
 
             sb.Append("provider: \"")

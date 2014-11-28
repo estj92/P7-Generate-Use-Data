@@ -34,11 +34,12 @@ namespace P7_Generate_Use_Data
         {
             IEnumerable<string> firstNames;
             IEnumerable<string> lastNames;
-            int nUsers = 100;
-            int nStations = 10;
-            int nBikes = 50;
-            int nReservations = 150;
-            int nTrips = 200;
+            int nUsers = 0;
+            int nStations = 0;
+            int nBikes = 0;
+            int nReservations = 0;
+            int nTrips = 0;
+            int nFeedbacks = 0;
 
             Coordinate topLeft = new Coordinate(100, 100);
             Coordinate bottomRight = new Coordinate(200, 200);
@@ -56,6 +57,7 @@ namespace P7_Generate_Use_Data
                 nBikes = GetInt(reader.ReadLine());
                 nReservations = GetInt(reader.ReadLine());
                 nTrips = GetInt(reader.ReadLine());
+                nFeedbacks = GetInt(reader.ReadLine());
 
                 topLeft = GetCoords(reader.ReadLine());
                 bottomRight = GetCoords(reader.ReadLine());
@@ -70,19 +72,22 @@ namespace P7_Generate_Use_Data
             var bikes = generator.GenerateBikes(nBikes, stations);
             var reservations = generator.GenerateReservations(nReservations, users, stations, bikes);
             var trips = generator.GenerateTrips(nTrips, users, stations, bikes);
+            var feedbacks = generator.GenerateFeedBacks(nFeedbacks, users);
 
 
-            Console.WriteLine("Users:\t\t" + users.Count().ToString().PadLeft(5));
-            Console.WriteLine("Stations:\t" + stations.Count().ToString().PadLeft(5));
-            Console.WriteLine("Bikes:\t\t" + bikes.Count().ToString().PadLeft(5));
-            Console.WriteLine("Reservations:\t" + reservations.Count().ToString().PadLeft(5));
-            Console.WriteLine("Trips:\t\t" + trips.Count().ToString().PadLeft(5));
+            Console.WriteLine("Users:\t\t" + users.Count.ToString().PadLeft(5));
+            Console.WriteLine("Stations:\t" + stations.Count.ToString().PadLeft(5));
+            Console.WriteLine("Bikes:\t\t" + bikes.Count.ToString().PadLeft(5));
+            Console.WriteLine("Reservations:\t" + reservations.Count.ToString().PadLeft(5));
+            Console.WriteLine("Trips:\t\t" + trips.Count.ToString().PadLeft(5));
+            Console.WriteLine("Feedbacks:\t" + feedbacks.Count.ToString().PadLeft(5));
 
             var b2 = bikes.Take(10);
             var r2 = reservations.Take(10);
             var s2 = stations.Take(10);
             var t2 = trips.Take(10);
             var u2 = users.Take(10);
+            var f2 = feedbacks.Take(10);
 
             //Print(b2);
             //Print(r2);
@@ -90,7 +95,7 @@ namespace P7_Generate_Use_Data
             //Print(t2);
             //Print(u2);
 
-            WriteToFile(bikes.Cast<ISequelize>(), reservations.Cast<ISequelize>(), stations.Cast<ISequelize>(), trips.Cast<ISequelize>(), users.Cast<ISequelize>());
+            WriteToFile(bikes.Cast<ISequelize>(), reservations.Cast<ISequelize>(), stations.Cast<ISequelize>(), trips.Cast<ISequelize>(), users.Cast<ISequelize>(), feedbacks.Cast<ISequelize>());
 
             Console.WriteLine("~~~~~DONE~~~~~");
             Console.ReadKey();
@@ -104,7 +109,7 @@ namespace P7_Generate_Use_Data
             }
         }
 
-        private static void WriteToFile(IEnumerable<ISequelize> bikes, IEnumerable<ISequelize> reservations, IEnumerable<ISequelize> stations, IEnumerable<ISequelize> trips, IEnumerable<ISequelize> users)
+        private static void WriteToFile(IEnumerable<ISequelize> bikes, IEnumerable<ISequelize> reservations, IEnumerable<ISequelize> stations, IEnumerable<ISequelize> trips, IEnumerable<ISequelize> users, IEnumerable<ISequelize> feedbacks)
         {
             string file = "create-use-data.js";
             File.Delete(file);
@@ -125,6 +130,8 @@ namespace P7_Generate_Use_Data
                 WriteItems(trips, "Trip", writer);
                 writer.WriteLine(",");
                 WriteItems(users, "User", writer);
+                writer.WriteLine(",");
+                WriteItems(feedbacks, "Feedback", writer);
 
                 writer.WriteLine();
                 writer.WriteLine("}");

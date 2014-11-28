@@ -30,15 +30,14 @@ namespace P7_Generate_Use_Data
         {
             StringBuilder sb = new StringBuilder("{ ");
 
-            sb.Append("location: ")
-                .Append(Location.LocationToSequelize)
+            sb.Append(Location.LocationToSequelize)
                 .Append(", ");
 
-            sb.Append("message")
+            sb.Append("message: \"")
                 .Append(Message)
-                .Append(", ");
+                .Append("\", ");
 
-            sb.Append("UserId")
+            sb.Append("UserId: ")
                 .Append(UserID);
 
             sb.Append(" }");
