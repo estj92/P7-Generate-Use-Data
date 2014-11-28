@@ -83,21 +83,21 @@ namespace P7_Generate_Use_Data
         {
             StringBuilder sb = new StringBuilder("{ ");
 
-            sb.Append("profile_id: ");
-            sb.Append(ProfileID);
-            sb.Append(", ");
+            sb.Append("id: ")
+                .Append(ProfileID)
+                .Append(", ");
 
-            sb.Append("provider: \"");
-            sb.Append(Provider);
-            sb.Append("\", ");
+            sb.Append("provider: \"")
+                .Append(Provider)
+                .Append("\", ");
 
-            sb.Append("email: ");
-            sb.Append(Mail);
-            sb.Append(", ");
+            sb.Append("email: ")
+                .Append(Mail)
+                .Append(", ");
 
-            sb.Append("display_name: \"");
-            sb.Append(Name);
-            sb.Append("\"");
+            sb.Append("display_name: \"")
+                .Append(Name)
+                .Append("\"");
 
             sb.Append(" }");
             return sb.ToString();

@@ -8,14 +8,19 @@ namespace P7_Generate_Use_Data
 {
     class Station:ISequelize
     {
-        public Station(string name, Coordinate location)
+        public Station(string name, Coordinate location, int spaces, int bikes)
         {
             Name = name;
             Location = location;
+            Spaces = spaces;
+            Bikes = bikes;
         }
 
+        public int ID { get; set; }
         public string Name { get; set; }
         public Coordinate Location { get; set; }
+        public int Spaces { get; set; }
+        public int Bikes { get; set; }
 
 
         public override string ToString()
@@ -29,17 +34,25 @@ namespace P7_Generate_Use_Data
         {
             StringBuilder sb = new StringBuilder("{ ");
 
-            sb.Append("name: \"");
-            sb.Append(Name);
-            sb.Append("\", ");
+            sb.Append("name: \"")
+                .Append(Name)
+                .Append("\", ");
 
-            sb.Append("location: ");
-            sb.Append(Location.LocationToSequelize);
+            sb.Append(Location.LocationToSequelize)
+                .Append(", ");
+
+            sb.Append("spaces: ")
+                .Append(Spaces)
+                .Append(", ");
+
+            sb.Append("bikes: ")
+                .Append(Bikes);
 
             sb.Append(" }");
             return sb.ToString();
         }
 
         #endregion
+
     }
 }

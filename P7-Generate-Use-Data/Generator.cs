@@ -142,7 +142,7 @@ namespace P7_Generate_Use_Data
                 var newCoords = TryToCreateCoordinates(MinDistanceBetweenStations, coordinates, TopLeft, BottomRight);
 
                 coordinates.Add(newCoords);
-                Station station = new Station(RandomLastName() + Rand.Next() + "-station", newCoords);
+                Station station = new Station(RandomLastName() + Rand.Next() + "-station", newCoords, 10000, 0);
                 stations.Add(station);
             }
 
@@ -162,18 +162,19 @@ namespace P7_Generate_Use_Data
 
                 if (rand.Next(5) < 3)
                 {
-                    bool occupied = (Rand.Next(0, 5) > 0);
+                    var status = ((Rand.Next(0, 5) > 0) ? Bike.Status.Occupied : Bike.Status.Unoccupied);
 
                     // out
                     var coords = RandomCoordinateInArea(TopLeft, BottomRight);
-                    Bike bike = new Bike(i, battery, coords, occupied, null);
+                    Bike bike = new Bike(i, battery, coords, status, null);
                     bikes.Add(bike);
                 }
                 else
                 {
                     // station
                     var station = stations[rand.Next(stations.Count)];
-                    Bike bike = new Bike(i, battery, station.Location, false, station);
+                    Bike bike = new Bike(i, battery, station.Location, Bike.Status.Unoccupied, station);
+                    station.Bikes++;
                     bikes.Add(bike);
                 }
             }
@@ -190,7 +191,7 @@ namespace P7_Generate_Use_Data
             {
                 var user = users.PickRandom();
                 var bike = bikes.PickRandom();
-                var station = stations.PickRandom();
+                //var station = stations.PickRandom();
                 var when = earliest.AddMinutes(Rand.Next((int)timeBetween.TotalMinutes));
 
                 var bikeOkay = !(bikesReserved.ContainsKey(bike) && bikesReserved[bike].Contains(when));
@@ -210,7 +211,7 @@ namespace P7_Generate_Use_Data
                     }
                     userReservations[user].Add(when);
 
-                    return new Reservation(user, station, bike, when);
+                    return new Reservation(user, bike, when);
                 }
             }
 

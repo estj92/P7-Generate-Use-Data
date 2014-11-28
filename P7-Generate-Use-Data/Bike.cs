@@ -8,7 +8,13 @@ namespace P7_Generate_Use_Data
 {
     class Bike: IEquatable<Bike>, ISequelize
     {
-        public Bike(int id, int battery, Coordinate location, bool occupied, Station station)
+        public enum Status
+        {
+            Occupied,
+            Unoccupied
+        }
+
+        public Bike(int id, int battery, Coordinate location, Status occupied, Station station)
         {
             ID = id;
             Location = location;
@@ -21,7 +27,7 @@ namespace P7_Generate_Use_Data
         public int Battery { get; set; }
         public Coordinate Location { get; set; }
         public Station Station { get; set; }
-        public bool Occupied { get; set; }
+        public Status Occupied { get; set; }
 
         public override string ToString()
         {
@@ -86,23 +92,26 @@ namespace P7_Generate_Use_Data
         {
             StringBuilder sb = new StringBuilder("{ ");
 
-            sb.Append("location: ");
-            sb.Append(Location.LocationToSequelize);
-            sb.Append(", ");
+            sb.Append("id:")
+                .Append(ID)
+                .Append(", ");
 
-            sb.Append("batteryLife: ");
-            sb.Append(Battery);
-            sb.Append(", ");
+            sb.Append(Location.LocationToSequelize)
+                .Append(", ");
 
-            sb.Append("status: \'");
-            if (Occupied)
-            {
-                sb.Append("un");
-            }
-            sb.Append("occupied\', ");
+            sb.Append("batteryLife: ")
+                .Append(Battery)
+                .Append(", ");
 
-            sb.Append("StationId: ");
-            sb.Append(Station == null ? "null" : "1");
+            sb.Append("status: '")
+                .Append(Occupied.ToString().ToLower())
+                .Append("', ");
+
+            // createdat
+            // updatedat
+
+            sb.Append("StationId: ")
+                .Append(Station == null ? "null" : Station.ID.ToString());
 
             sb.Append(" }");
             return sb.ToString();

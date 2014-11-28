@@ -26,7 +26,22 @@ namespace P7_Generate_Use_Data
         {
             get
             {
-                return "\"" + Lattitude.ToString(System.Globalization.CultureInfo.InvariantCulture) + ", " + Longtitude.ToString(System.Globalization.CultureInfo.InvariantCulture) + "\"";
+                return
+                  LattitudeToSequelize + ", " + LongtitudeToSequelize;
+            }
+        }
+        public string LattitudeToSequelize
+        {
+            get
+            {
+                return "lattitude: " + Lattitude.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            }
+        }
+        public string LongtitudeToSequelize
+        {
+            get
+            {
+                return "longtitude: " + Longtitude.ToString(System.Globalization.CultureInfo.InvariantCulture);
             }
         }
     }

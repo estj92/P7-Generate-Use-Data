@@ -44,28 +44,32 @@ namespace P7_Generate_Use_Data
         {
             StringBuilder sb = new StringBuilder("{ ");
 
-            sb.Append("startTime: new Date");
-            sb.Append(Extensions.DateTimeToSequelize(StartTime));
-            sb.Append(", ");
+            sb.Append("startTime: new Date")
+                .Append(Extensions.DateTimeToSequelize(StartTime))
+                .Append(", ");
 
-            sb.Append("endTime: new Date");
-            sb.Append(Extensions.DateTimeToSequelize(Endtime));
-            sb.Append(", ");
+            sb.Append("endTime: new Date")
+                .Append(Extensions.DateTimeToSequelize(Endtime))
+                .Append(", ");
 
-            sb.Append("startLocation: ");
-            sb.Append(StartLocation.LocationToSequelize);
-            sb.Append(", ");
+            sb.Append("start")
+                .Append(StartLocation.LattitudeToSequelize)
+                .Append(", start")
+                .Append(StartLocation.LongtitudeToSequelize)
+                .Append(", ");
 
-            sb.Append("endLocation: ");
-            sb.Append(EndLocation.LocationToSequelize);
-            sb.Append(", ");
+            sb.Append("end")
+                .Append(EndLocation.LattitudeToSequelize)
+                .Append(", end")
+                .Append(EndLocation.LongtitudeToSequelize)
+                .Append(", ");
 
-            sb.Append("UserId: ");
-            sb.Append(User == null ? "null" : User.ProfileID.ToString());
-            sb.Append(", ");
+            sb.Append("UserId: ")
+                .Append(User == null ? "null" : User.ProfileID.ToString())
+                .Append(", ");
 
-            sb.Append("BikeID: ");
-            sb.Append(Bike.ID);
+            sb.Append("BikeID: ")
+                .Append(Bike.ID);
 
             sb.Append(" }");
             return sb.ToString();
