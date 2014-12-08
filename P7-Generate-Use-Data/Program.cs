@@ -57,11 +57,9 @@ namespace P7_Generate_Use_Data
                 nBikes = GetInt(reader.ReadLine());
                 nReservations = GetInt(reader.ReadLine());
                 nTrips = GetInt(reader.ReadLine());
-                nFeedbacks = GetInt(reader.ReadLine());
-
                 topLeft = GetCoords(reader.ReadLine());
                 bottomRight = GetCoords(reader.ReadLine());
-
+                nFeedbacks = GetInt(reader.ReadLine());
                 earliest = new DateTime(GetInt(reader.ReadLine()), 1, 1);
             }
 

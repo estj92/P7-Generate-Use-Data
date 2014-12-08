@@ -10,11 +10,15 @@ namespace P7_Generate_Use_Data
     {
         public Station(string name, Coordinate location, int spaces, int bikes)
         {
+            ID = ID_Gen;
             Name = name;
             Location = location;
             Spaces = spaces;
             Bikes = bikes;
         }
+
+        private static int ID_Gen { get { return id_gen++; } }
+        private static int id_gen = 0;
 
         public int ID { get; set; }
         public string Name { get; set; }
