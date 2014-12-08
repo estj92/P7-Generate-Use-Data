@@ -107,8 +107,8 @@ namespace P7_Generate_Use_Data
                 .Append(Occupied.ToString().ToLower())
                 .Append("', ");
 
-            // createdat
-            // updatedat
+            sb.Append(Location.LocationToSequelize)
+                .Append(", ");
 
             sb.Append("StationId: ")
                 .Append(Station == null ? "null" : Station.ID.ToString());
