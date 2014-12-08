@@ -88,17 +88,21 @@ namespace P7_Generate_Use_Data
         {
             StringBuilder sb = new StringBuilder("{ ");
 
-            sb.Append("id: ")
-                .Append(ID)
-                .Append(", ");
+            //sb.Append("id: ")
+            //    .Append(ID)
+            //    .Append(", ");
+
+            sb.Append("profile_id: \"")
+                .Append(ProfileID)
+                .Append("\", ");
 
             sb.Append("provider: \"")
                 .Append(Provider)
                 .Append("\", ");
 
-            sb.Append("email: ")
+            sb.Append("email: \"")
                 .Append(Mail)
-                .Append(", ");
+                .Append("\", ");
 
             sb.Append("display_name: \"")
                 .Append(Name)

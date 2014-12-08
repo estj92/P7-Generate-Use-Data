@@ -92,9 +92,9 @@ namespace P7_Generate_Use_Data
         {
             StringBuilder sb = new StringBuilder("{ ");
 
-            sb.Append("id:")
-                .Append(ID)
-                .Append(", ");
+            //sb.Append("id:")
+            //    .Append(ID)
+            //    .Append(", ");
 
             sb.Append(Location.LocationToSequelize)
                 .Append(", ");
